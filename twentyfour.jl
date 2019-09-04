@@ -62,11 +62,13 @@ function try_funnel_pair(soln::String, cards::Array{Card, 1}, unaries::Array{Una
                                     current_soln = string("(", stringValue1, binary1.symbol, stringValue2, ")");
                                     available_cards = deleteat!(deepcopy(cards), [min(i,j),max(i,j)]);
                                     for binary2 in binaries
-                                        result = try_funnel_pair(current_soln, available_cards, unaries, binaries, binary2.inverse(total, currentValue));
-                                        if result == no_solution
-                                            continue;
-                                        else
-                                            return string(current_soln, binary2.symbol, current_soln);
+                                        if binary2.inverse(total, currentValue) < Inf
+                                            result = try_funnel_pair(current_soln, available_cards, unaries, binaries, binary2.inverse(total, currentValue));
+                                            if result == no_solution
+                                                continue;
+                                            else
+                                                return string(result, binary2.symbol, current_soln);
+                                            end
                                         end
                                     end
                                 end
